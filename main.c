@@ -1,12 +1,20 @@
 
-#include <stdio.h>
+#include <stdio.h>      /* printf() */
 #include <stdlib.h>
-//#include <unistd.h>
+#include <unistd.h>     /* sleep() */
 #include <getopt.h>     /* getopt_long() */
 
+#include "SDL.h"
 #include "logic.h"
+#include "graphics.h"
+#include "input.h"
 
 #define DEBUG 1
+
+/* Constants; can be changed on startup */
+char *TITLE = "Automata";
+int WIN_W = 320;
+int WIN_H = 240;
 
 /* experimenting with structs in more depth */
 struct Parameters {
@@ -22,6 +30,7 @@ struct option long_options[4] = {  // oh my god did that actually work
     {"under-population", required_argument, 0, 'u'},
     {"birth-population", required_argument, 0, 'b'}
 };
+
 
 /* Parse argv and return a struct representing the program's parameters */
 Parameters *get_parameters(int argc, char**argv) {
@@ -44,11 +53,12 @@ Parameters *get_parameters(int argc, char**argv) {
             result->birth_population = atoi(optarg);
             break;
         }
-        printf("I'm being helpful!\n");
+        //printf("I'm being helpful!\n"); //XXX
     } while(c != -1);
 
     return result;
 }
+
 
 int main(int argc, char** argv) {
     printf("Hi there!\n");
@@ -57,5 +67,10 @@ int main(int argc, char** argv) {
     printf("u: %i o: %i b: %i\n", 
         para->under_population, para->over_population, para->birth_population);
     free(para);
+
+    SDL_Window *window = start_sdl(WIN_W, WIN_H, TITLE);
+    sleep(1); // TODO: add input processing
+    end_sdl(window);
+
     return 0;
 }
