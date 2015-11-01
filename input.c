@@ -1,6 +1,9 @@
 
 #include "SDL.h"
 
+#include "constants.h"
+#include "input.h"
+
 int any_key_pressed() {
     int status = 0;
     SDL_Event event;

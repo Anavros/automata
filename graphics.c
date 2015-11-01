@@ -4,22 +4,23 @@
 /* I don't know where it would stop, though. Do I include a source file with
  * their values too? Or only the extern declarations? */
 #include "SDL.h"
+#include "constants.h"  /* TITLE WIN_[X|Y|W|H] Board */
+#include "graphics.h"
 
-int WINDOW_X = 50;
-int WINDOW_Y = 50;
-
-/* May return NULL if initialization fails */
-SDL_Window *start_sdl(int width, int height, char* title) {
+/* may return NULL if initialization fails */
+/* uses constants found in constants.h */
+SDL_Window *start_sdl() {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow(
-        title, WINDOW_X, WINDOW_Y, width, height, SDL_WINDOW_OPENGL);
+        TITLE, WIN_X, WIN_Y, WIN_W, WIN_H, SDL_WINDOW_OPENGL);
 
     return window;
 }
 
-SDL_Surface *render_board(int win_w, int win_h, int win_d) { // TODO: add Board
+SDL_Surface *render_board(Board *board) {
+    // TODO: board is unused
     SDL_Surface *surface;
-    surface = SDL_CreateRGBSurface(0, win_w, win_h, win_d, 0, 0, 0, 0);
+    surface = SDL_CreateRGBSurface(0, WIN_W, WIN_H, WIN_D, 0, 0, 0, 0);
     SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 200, 75, 75)); //Temp
     return surface;
 }
