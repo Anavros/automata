@@ -20,16 +20,16 @@ struct Board {  // Will this cause problems if the typedef is in logic.h?
     int height; 
 };
 
-/* for getopt_long() */
-struct option long_options[4] = {  // oh my god did that actually work
-    {"over-population", required_argument, 0, 'c'},
-    {"under-population", required_argument, 0, 'u'},
-    {"birth-population", required_argument, 0, 'b'}
-};
-
 /* Parse argv and return a struct representing the program's parameters */
 void set_parameters(int argc, char**argv) {
+
     int c, index;
+    struct option long_options[4] = {  // oh my god did that actually work
+        {"over-population", required_argument, 0, 'c'},
+        {"under-population", required_argument, 0, 'u'},
+        {"birth-population", required_argument, 0, 'b'}
+    };
+
     do {
         c = getopt_long(argc, argv, "o:u:b:", long_options, &index);
         switch(c) {
