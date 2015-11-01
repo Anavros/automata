@@ -1,14 +1,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <getopt.h>     /* getopt_long() */
 
 #include "logic.h"
 
+#define DEBUG 1
+
 /* experimenting with structs in more depth */
 struct Parameters {
-    int test;
     enum {Moore, Neumann, Extended} neighborhood;
     int over_population;
     int under_population;
@@ -16,7 +17,7 @@ struct Parameters {
 }; typedef struct Parameters Parameters;
 
 /* for getopt_long() */
-struct option *long_options = {
+struct option long_options[4] = {  // oh my god did that actually work
     {"over-population", required_argument, 0, 'c'},
     {"under-population", required_argument, 0, 'u'},
     {"birth-population", required_argument, 0, 'b'}
@@ -28,22 +29,24 @@ Parameters *get_parameters(int argc, char**argv) {
 
     int c, index;
     do {
-        c = getopt_long(argc, argv, "to:u:b:", long_options, &index);
+        c = getopt_long(argc, argv, "o:u:b:", long_options, &index);
+        switch(c) {
+        case 'o':
+            if(DEBUG) printf("Setting 'over-population' to %s\n", optarg);
+            result->over_population = atoi(optarg); 
+            break; //TODO switch atoi to something safer
+        case 'u':
+            if(DEBUG) printf("Setting 'under-population' to %s\n", optarg);
+            result->under_population = atoi(optarg);
+            break;
+        case 'b':
+            if(DEBUG) printf("Setting 'birth-population' to %s\n", optarg);
+            result->birth_population = atoi(optarg);
+            break;
+        }
         printf("I'm being helpful!\n");
     } while(c != -1);
 
-
-
-/*
-    int x; while( (x = getopt(argc, argv, "tac:")) != -1) switch(x) {
-        case 't':
-            result->test = 5;
-            break;
-        default:
-            result->test = 0;
-            break;
-    }
-*/
     return result;
 }
 
@@ -51,7 +54,8 @@ int main(int argc, char** argv) {
     printf("Hi there!\n");
 
     Parameters *para = get_parameters(argc, argv);
-    printf("Test: %i\n", para->test);
+    printf("u: %i o: %i b: %i\n", 
+        para->under_population, para->over_population, para->birth_population);
     free(para);
     return 0;
 }
