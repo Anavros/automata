@@ -1,7 +1,8 @@
 
 #include <stdio.h>      /* printf() */
-#include <stdlib.h>
-#include <unistd.h>     /* sleep() */
+//#include <stdlib.h>
+#include <unistd.h>     /* sleep() srand() */
+#include <time.h>       /* time() */
 
 #include "SDL.h"
 
@@ -12,15 +13,20 @@
 
 int main(int argc, char** argv) {
     set_parameters(argc, argv);
+    srand(time(NULL));
+
     SDL_Window *window = start_sdl();
+    int *board = create_board();
+    seed_board(board);
 
     do {
-        SDL_Surface *board = render_board(board);
-        update_sdl(window, board);
-        sleep(1); // TODO: add input processing TODO: also fps
-        free_surface(board);
+        SDL_Surface *board_image = render_board(board);
+        update_sdl(window, board_image);
+        sleep(1); // TODO: add fps
+        free_surface(board_image);
     } while(!any_key_pressed());
 
+    free(board);
     end_sdl(window);
 
     return 0;

@@ -4,7 +4,8 @@
 /* I don't know where it would stop, though. Do I include a source file with
  * their values too? Or only the extern declarations? */
 #include "SDL.h"
-#include "constants.h"  /* TITLE WIN_[X|Y|W|H] Board */
+
+#include "constants.h"  /* TITLE WIN_[X|Y|W|H] */
 #include "graphics.h"
 
 /* may return NULL if initialization fails */
@@ -17,11 +18,31 @@ SDL_Window *start_sdl() {
     return window;
 }
 
-SDL_Surface *render_board(Board *board) {
-    // TODO: board is unused
+SDL_Surface *render_board(int *board) {
     SDL_Surface *surface;
     surface = SDL_CreateRGBSurface(0, WIN_W, WIN_H, WIN_D, 0, 0, 0, 0);
-    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 200, 75, 75)); //Temp
+
+    int color_1 = SDL_MapRGB(surface->format, 200, 75, 75);
+    int color_0 = SDL_MapRGB(surface->format, 100, 25, 25);
+
+    SDL_Rect box;
+    box.w = WIN_W / BOARD_W;
+    box.h = WIN_H / BOARD_H;
+    int x; for(x=0; x<BOARD_W; x++) {
+        int y; for(y=0; y<BOARD_H; y++) {
+            box.x = x*box.w;
+            box.y = y*box.h;
+
+            int color;
+            //printf("segfaults ahead!\n");
+            //printf("...trying to access board at %i\n", (x*BOARD_W)+y);
+            if(board[ (x*BOARD_W)+y ] == 1) { color = color_1; }
+            else { color = color_0; }
+
+            SDL_FillRect(surface, &box, color);
+        }
+    }
+    //SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 200, 75, 75)); //Temp
     return surface;
 }
 

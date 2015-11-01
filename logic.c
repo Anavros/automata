@@ -1,14 +1,31 @@
 
-#include <stdlib.h>
+#include <stdlib.h>     /* calloc() */
 #include <getopt.h>     /* getopt_long() */
+#include <unistd.h>     /* rand() */
 
-#include "constants.h"  /* [OVER|UNDER|BIRTH]_POP Board BOARD_[W|H]*/
+#include "constants.h"  /* [OVER|UNDER|BIRTH]_POP BOARD_[W|H]*/
 #include "logic.h"
 
 
-void create_board() { }
+int *create_board() {
+    int *board = calloc(sizeof(int), BOARD_W*BOARD_H);
+    return board;
+}
 
-void step(Board *board) { }
+/* Could I create a generic function to touch all elements of the board? */
+void seed_board(int *board) {
+    int x; for(x=0; x<BOARD_W; x++) {
+        int y; for(y=0; y<BOARD_H; y++) {
+            int r = rand() % 20; // TODO set as global constant
+            int n = r==1 ? 1 : 0;
+            board[ (x*BOARD_W)+y ] = n;
+        }
+    }
+}
+
+
+void step(int *board) { }
+
 
 /* Parse argv and return a struct representing the program's parameters */
 void set_parameters(int argc, char**argv) {

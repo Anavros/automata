@@ -3,7 +3,8 @@
 #include "constants.h"
 
 enum Neighborhood { Moore, Neumann };
-struct Board { int *array; int width; int height; };
+//struct Board { int *array; int width; int height; };
+//struct ColorMap { int value; int r; int g; int b; };
 
 char *TITLE = "Automata";
 int WIN_W = 320;

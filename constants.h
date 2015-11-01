@@ -16,10 +16,13 @@ int BIRTH_POP;
 int BOARD_W;
 int BOARD_H;
 
-struct Board;
-typedef struct Board Board;
-
 enum Neighborhood;
 typedef enum Neighborhood Neighborhood;
+
+//struct Board;
+//typedef struct Board Board;
+
+//struct ColorMap;
+//typedef struct ColorMap ColorMap;
 
 #endif
