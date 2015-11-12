@@ -1,8 +1,4 @@
 
-//#include "logic.h" // for Board; I don't know if this is bad or not
-/* I might do a single header for constant values */
-/* I don't know where it would stop, though. Do I include a source file with
- * their values too? Or only the extern declarations? */
 #include "SDL.h"
 
 #include "constants.h"  /* TITLE WIN_[X|Y|W|H] */

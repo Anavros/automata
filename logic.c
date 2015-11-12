@@ -3,7 +3,7 @@
 #include <getopt.h>     /* getopt_long() */
 #include <unistd.h>     /* rand() */
 
-#include "constants.h"  /* [OVER|UNDER|BIRTH]_POP BOARD_[W|H]*/
+#include "constants.h"  /* [OVER|UNDER|BIRTH]_POP BOARD_[W|H] RAND_CHANCE */
 #include "logic.h"
 
 
@@ -13,6 +13,25 @@ int *create_board() {
 }
 
 /* Could I create a generic function to touch all elements of the board? */
+/* Takes a generic function of the form "void *func(int *cell);" */
+void map_over_cells(int *board, void (*function)(int*)) {
+    int x; for(x=0; x<BOARD_W; x++) {
+        int y; for(y=0; y<BOARD_H; y++) {
+            int *cell = &board[ (x*BOARD_W)+y ];
+            function(cell);
+        }
+    }
+}
+
+// XXX could be expanded for multiple possible values
+void seed_cell(int *cell) {
+    int r = rand() % RAND_CHANCE;
+    int n = r==1 ? 1 : 0;
+    *cell = n; // XXX watch out for segfaults here!
+}
+
+//map_over_cells(board, &seed_cell);
+
 void seed_board(int *board) {
     int x; for(x=0; x<BOARD_W; x++) {
         int y; for(y=0; y<BOARD_H; y++) {
@@ -24,7 +43,9 @@ void seed_board(int *board) {
 }
 
 
-void step(int *board) { }
+/* Initially, I am only going to implement simple game of life rules. */
+/* After the program is stable and working I will get more complicated. */
+//void step_cell(int *board) { }
 
 
 /* Parse argv and return a struct representing the program's parameters */

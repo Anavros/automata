@@ -13,6 +13,8 @@ int OVER_POP;
 int UNDER_POP;
 int BIRTH_POP;
 
+int RAND_CHANCE;
+
 int BOARD_W;
 int BOARD_H;
 

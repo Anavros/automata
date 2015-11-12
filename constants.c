@@ -19,5 +19,7 @@ int UNDER_POP = 2;
 int BIRTH_POP = 3;
 Neighborhood HOOD = Moore;
 
+int RAND_CHANCE = 20; // higher values have lower chances (rand()%chance == 1)
+
 int BOARD_W = 20;
 int BOARD_H = 20;
