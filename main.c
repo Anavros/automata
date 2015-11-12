@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 
     SDL_Window *window = start_sdl();
     int *board = create_board();
-    seed_board(board);
+    map_over_cells(board, seed_cell);
 
     do {
         SDL_Surface *board_image = render_board(board);

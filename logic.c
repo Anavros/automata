@@ -23,6 +23,36 @@ void map_over_cells(int *board, void (*function)(int*)) {
     }
 }
 
+/* Return a list of cell values (ints). */
+/* Reads the type of neighborhood from constants. */
+/* XXX Should protect against segfaults! */
+/* Includes the center cell's value! */
+int *get_neighbor_values(int *board, int row, int column) {
+    switch(HOOD) {
+    case Neighborhood.Moore:
+        int values[8];
+        int x, y;
+        for(x = -1; x <= 1; x++) {
+            for(y = -1; y <= 1; y++) {
+
+                // 0 0 0 0 0 0 0
+                // 0 1 1 1 1 1 0
+                // 0 1 1 1 1 1 0
+                // 0 1 1 1 1 1 0
+                // 0 1 1 1 1 1 0
+                // 0 1 1 1 1 1 0
+                // 0 0 0 0 0 0 0
+
+                int index = (row*BOARD_W) + column;
+                index += y + (x*BOARD_W);
+            }
+        }
+        break;
+    case Neighborhood.Neumann:
+        break;
+    }
+}
+
 // XXX could be expanded for multiple possible values
 void seed_cell(int *cell) {
     int r = rand() % RAND_CHANCE;
@@ -30,22 +60,11 @@ void seed_cell(int *cell) {
     *cell = n; // XXX watch out for segfaults here!
 }
 
-//map_over_cells(board, &seed_cell);
-
-void seed_board(int *board) {
-    int x; for(x=0; x<BOARD_W; x++) {
-        int y; for(y=0; y<BOARD_H; y++) {
-            int r = rand() % 20; // TODO set as global constant
-            int n = r==1 ? 1 : 0;
-            board[ (x*BOARD_W)+y ] = n;
-        }
-    }
-}
-
-
 /* Initially, I am only going to implement simple game of life rules. */
 /* After the program is stable and working I will get more complicated. */
-//void step_cell(int *board) { }
+void step_cell(int *cell) {
+    //pass
+}
 
 
 /* Parse argv and return a struct representing the program's parameters */
