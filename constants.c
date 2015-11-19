@@ -2,13 +2,9 @@
 
 #include "constants.h"
 
-enum Neighborhood { Moore, Neumann };
-//struct Board { int *array; int width; int height; };
-//struct ColorMap { int value; int r; int g; int b; };
-
 char *TITLE = "Automata";
-int WIN_W = 320;
-int WIN_H = 240;
+int WIN_W = 200;
+int WIN_H = 200;
 int WIN_D = 32;
 int WIN_X = 50;
 int WIN_Y = 50;
@@ -17,9 +13,11 @@ int WIN_Y = 50;
 int OVER_POP = 3;
 int UNDER_POP = 2;
 int BIRTH_POP = 3;
-Neighborhood HOOD = Moore;
 
-int RAND_CHANCE = 20; // higher values have lower chances (rand()%chance == 1)
+int RAND_CHANCE = 2; // higher values have lower chances (rand()%chance == 1)
+
+//typedef enum { Moore, Neumann } Neighborhood;
+Neighborhood HOOD = Moore;
 
 int BOARD_W = 20;
 int BOARD_H = 20;

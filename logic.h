@@ -1,11 +1,14 @@
 
-#ifndef LOGIC_H
-#define LOGIC_H
+#ifndef AUTOMATA_LOGIC_H
+#define AUTOMATA_LOGIC_H
 
-void set_parameters(int argc, char**argv);
+int get_index(int row, int column);
 int *create_board();
+int find_sum(int x, int y, int matrix[8][2], int* board);
+int *create_value_board(int *board);
 void map_over_cells(int *board, void (*function)(int*));
 void seed_cell(int *cell);
 void step(int *board);
+void set_parameters(int argc, char**argv);
 
 #endif

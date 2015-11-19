@@ -2,6 +2,8 @@
 #ifndef AUTOMATA_CONSTANTS_H
 #define AUTOMATA_CONSTANTS_H
 
+typedef enum { Moore, Neumann } Neighborhood;
+
 char *TITLE;
 int WIN_W;
 int WIN_H;
@@ -14,17 +16,9 @@ int UNDER_POP;
 int BIRTH_POP;
 
 int RAND_CHANCE;
+Neighborhood HOOD;
 
 int BOARD_W;
 int BOARD_H;
-
-enum Neighborhood;
-typedef enum Neighborhood Neighborhood;
-
-//struct Board;
-//typedef struct Board Board;
-
-//struct ColorMap;
-//typedef struct ColorMap ColorMap;
 
 #endif
