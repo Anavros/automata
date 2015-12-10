@@ -8,10 +8,14 @@
 #include "logic.h"
 
 
+/* Shortcut to calculate the index for a "2D" matrix that is actually 1D. */
 int get_index(int row, int column) {
     return (row*BOARD_W) + column;
 }
 
+/* Allocates and memsets a new chunk of memory.
+ * Takes board dimensions from constants.h.
+ */
 int *create_board() {
     int *board = calloc(sizeof(int), BOARD_W*BOARD_H);
     return board;
@@ -19,7 +23,7 @@ int *create_board() {
 
 int find_sum(int x, int y, int matrix[8][2], int* board) {
     int sum = 0;
-    int len = 18; // TODO
+    int len = 16; // TODO
     //printf("len = %i", len);
     int n; for(n=0; n<len/2; n++) {
         //printf(" %i\n", n);
@@ -29,7 +33,7 @@ int find_sum(int x, int y, int matrix[8][2], int* board) {
         //printf(" mx: %i; my: %i;\n ", matrix[n][0], matrix[n][1]);
 
         /* verify we're not outside the board */
-        if(dx < 0 || dy < 0 || dx > BOARD_W || dy > BOARD_H) {
+        if(dx < 0 || dy < 0 || dx >= BOARD_W || dy >= BOARD_H) {
             printf("Vetted cell; (%i, %i) is outside allowed range.\n", dx, dy);
             continue;
         } else {
@@ -54,7 +58,7 @@ int *create_value_board(int *board) {
     };
 
     int row, column;
-    for(row=0; row<BOARD_W; row++) {
+    for(row=0; row<BOARD_H; row++) {
         for(column=0; column<BOARD_W; column++) {
             value_board[get_index(row, column)] = 
                 find_sum(row, column, moore_matrix, board);
