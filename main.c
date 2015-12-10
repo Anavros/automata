@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
         step(board);
         SDL_Surface *board_image = render_board(board);
         update_sdl(window, board_image);
-        sleep(5); // TODO: add fps
+        sleep(0.01); // TODO: add fps
         free_surface(board_image);
     } while(!any_key_pressed());
 

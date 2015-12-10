@@ -10,9 +10,9 @@ int WIN_X = 50;
 int WIN_Y = 50;
 
 /* default sim parameters */
-int OVER_POP = 3;
-int UNDER_POP = 2;
-int BIRTH_POP = 3;
+int OVER_POP = 4;
+int UNDER_POP = 1;
+int BIRTH_POP = 2;
 
 int RAND_CHANCE = 2; // higher values have lower chances (rand()%chance == 1)
 

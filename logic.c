@@ -34,15 +34,15 @@ int find_sum(int x, int y, int matrix[8][2], int* board) {
 
         /* verify we're not outside the board */
         if(dx < 0 || dy < 0 || dx >= BOARD_W || dy >= BOARD_H) {
-            printf("Vetted cell; (%i, %i) is outside allowed range.\n", dx, dy);
+            //printf("Vetted cell; (%i, %i) is outside allowed range.\n", dx, dy);
             continue;
         } else {
-            printf("Passed cell; (%i, %i) has value %i.\n", dx, dy, 
-                board[get_index(dx, dy)]);
+            //printf("Passed cell; (%i, %i) has value %i.\n", dx, dy, 
+                //board[get_index(dx, dy)]);
             sum += board[get_index(dx, dy)];
         }
     }
-    printf("sum = %i\n", sum);
+    //printf("sum = %i\n", sum);
     return sum;
 }
 
@@ -93,10 +93,9 @@ void step(int *cell_board) {
         int y; for(y=0; y<BOARD_W; y++) {
             int index = get_index(x, y);
             int cell_value = cell_board[index];
+            //printf("cell value is %i.\n", cell_value);
             int neighbors_value = value_board[index];
-
-                    cell_board[index] = 1;
-                    cell_board[index] = 0;
+            //printf("neighbors value is %i.\n", neighbors_value);
 
             switch(cell_value) {
             case (0):
@@ -105,7 +104,7 @@ void step(int *cell_board) {
                 }
                 break;
             case (1):
-                if(neighbors_value <= UNDER_POP || neighbors_value >= OVER_POP) {
+                if(neighbors_value <= UNDER_POP-1 || neighbors_value >= OVER_POP-1) {
                     cell_board[index] = 0;
                 }
                 break;
