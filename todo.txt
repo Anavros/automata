@@ -1,0 +1,7 @@
+
+TODO:
+-> implement fps limit
+-> allow traditional cell console args like -b134 -o45 etc
+-> outsource settings to a config file
+-> add one-dimensional automata with rule n arg (e.g. rule 180)
+-> allow board wrapping i.e. toroidal space

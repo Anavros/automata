@@ -11,6 +11,8 @@ int WIN_D;
 int WIN_X;
 int WIN_Y;
 
+int MAX_FPS;
+
 int OVER_POP;
 int UNDER_POP;
 int BIRTH_POP;

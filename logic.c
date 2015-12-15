@@ -1,7 +1,6 @@
 
 #include <stdlib.h>     /* calloc() */
 #include <stdio.h>//XXX
-#include <getopt.h>     /* getopt_long() */
 #include <unistd.h>     /* rand() */
 
 #include "constants.h"  /* [OVER|UNDER|BIRTH]_POP BOARD_[W|H] RAND_CHANCE */
@@ -16,7 +15,7 @@ int get_index(int row, int column) {
 /* Allocates and memsets a new chunk of memory.
  * Takes board dimensions from constants.h.
  */
-int *create_board() {
+int *create_board(void) {
     int *board = calloc(sizeof(int), BOARD_W*BOARD_H);
     return board;
 }
@@ -114,31 +113,4 @@ void step(int *cell_board) {
         }
     }
     free(value_board);
-}
-
-
-/* Set program constants according to arguments. */
-void set_parameters(int argc, char**argv) {
-
-    int c, index;
-    struct option long_options[4] = {
-        {"over-population", required_argument, 0, 'c'},
-        {"under-population", required_argument, 0, 'u'},
-        {"birth-population", required_argument, 0, 'b'}
-    };
-
-    do {
-        c = getopt_long(argc, argv, "o:u:b:", long_options, &index);
-        switch(c) {
-        case 'o':
-            OVER_POP = atoi(optarg); 
-            break; //TODO switch atoi to something safer
-        case 'u':
-            UNDER_POP = atoi(optarg);
-            break;
-        case 'b':
-            BIRTH_POP = atoi(optarg);
-            break;
-        }
-    } while(c != -1);
 }

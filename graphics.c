@@ -6,7 +6,7 @@
 
 /* may return NULL if initialization fails */
 /* uses constants found in constants.h */
-SDL_Window *start_sdl() {
+SDL_Window *start_sdl(void) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow(
         TITLE, WIN_X, WIN_Y, WIN_W, WIN_H, SDL_WINDOW_OPENGL);
@@ -18,8 +18,8 @@ SDL_Surface *render_board(int *board) {
     SDL_Surface *surface;
     surface = SDL_CreateRGBSurface(0, WIN_W, WIN_H, WIN_D, 0, 0, 0, 0);
 
-    int color_1 = SDL_MapRGB(surface->format, 200, 75, 75);
-    int color_0 = SDL_MapRGB(surface->format, 100, 25, 25);
+    int color_1 = SDL_MapRGB(surface->format, 200, 200, 200);
+    int color_0 = SDL_MapRGB(surface->format, 100, 100, 100);
 
     SDL_Rect box;
     box.w = WIN_W / BOARD_W;
