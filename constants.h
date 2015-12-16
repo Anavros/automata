@@ -13,9 +13,12 @@ int WIN_Y;
 
 int MAX_FPS;
 
-int OVER_POP;
-int UNDER_POP;
-int BIRTH_POP;
+//int OVER_POP;
+//int UNDER_POP;
+//int BIRTH_POP;
+
+int BORN_NS;
+int LIVE_NS;
 
 int RAND_CHANCE;
 Neighborhood HOOD;

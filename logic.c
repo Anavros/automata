@@ -1,7 +1,8 @@
 
-#include <stdlib.h>     /* calloc() */
-#include <stdio.h>//XXX
+#include <stdlib.h>     /* calloc() div() */
+#include <stdio.h>
 #include <unistd.h>     /* rand() */
+#include <math.h>       /* log10() pow() */
 
 #include "constants.h"  /* [OVER|UNDER|BIRTH]_POP BOARD_[W|H] RAND_CHANCE */
 #include "logic.h"
@@ -73,7 +74,7 @@ int *create_value_board(int *board) {
 void map_over_cells(int *board, void (*function)(int*)) {
     int x; for(x=0; x<BOARD_W; x++) {
         int y; for(y=0; y<BOARD_H; y++) {
-            int *cell = &board[ (x*BOARD_W)+y ];
+            int *cell = &board[get_index(x, y)];
             function(cell);
         }
     }
@@ -86,30 +87,48 @@ void seed_cell(int *cell) {
     *cell = n; // XXX watch out for segfaults here!
 }
 
+/* Update a cell based on its neighbor value. */
+void update_cell(int *cell, int n) {
+    switch(*cell) {
+        case (0):
+            if(digit_included(n, BORN_NS)) {
+                *cell = 1;
+            }
+            break;
+        case (1):
+            if(!digit_included(n, LIVE_NS)) {
+                *cell = 0;
+            }
+            break;
+        default: 
+            break;
+    }
+}
+
+int num_digits(int n) {
+    return (int) floor(log10((double) n))+1;
+}
+
+int digit_included(int n, int m) {
+    int m_len = num_digits(m);
+    char digit_string[m_len+1];
+    snprintf(digit_string, m_len+1, "%d", m);
+    int i; for(i=0; i<m_len; i++) {
+        if(n+'0' == digit_string[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void step(int *cell_board) {
     int *value_board = create_value_board(cell_board);
     int x; for(x=0; x<BOARD_W; x++) {
         int y; for(y=0; y<BOARD_W; y++) {
             int index = get_index(x, y);
-            int cell_value = cell_board[index];
-            //printf("cell value is %i.\n", cell_value);
+            int *cell = &cell_board[index];
             int neighbors_value = value_board[index];
-            //printf("neighbors value is %i.\n", neighbors_value);
-
-            switch(cell_value) {
-            case (0):
-                if(neighbors_value == BIRTH_POP) {
-                    cell_board[index] = 1;
-                }
-                break;
-            case (1):
-                if(neighbors_value <= UNDER_POP-1 || neighbors_value >= OVER_POP-1) {
-                    cell_board[index] = 0;
-                }
-                break;
-            default:
-                break;
-            }
+            update_cell(cell, neighbors_value);
         }
     }
     free(value_board);

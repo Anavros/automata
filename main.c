@@ -17,24 +17,20 @@ void set_parameters(int argc, char**argv) {
 
     int c, index;
     struct option long_options[5] = {
-        {"over-population", required_argument, 0, 'o'},
-        {"under-population", required_argument, 0, 'u'},
-        {"birth-population", required_argument, 0, 'b'},
+        {"survive", required_argument, 0, 's'},
+        {"birth", required_argument, 0, 'b'},
         {"frames-per-second", required_argument, 0, 'f'},
         {"seed-density", required_argument, 0, 'r'}
     };
 
     do {
-        c = getopt_long(argc, argv, "o:u:b:f:r:", long_options, &index);
+        c = getopt_long(argc, argv, "s:b:f:r:", long_options, &index);
         switch(c) {
-        case 'o':
-            OVER_POP = atoi(optarg);
-            break; //TODO switch atoi to something safer
-        case 'u':
-            UNDER_POP = atoi(optarg);
+        case 's':
+            LIVE_NS = atoi(optarg);
             break;
         case 'b':
-            BIRTH_POP = atoi(optarg);
+            BORN_NS = atoi(optarg);
             break;
         case 'f':
             MAX_FPS = atoi(optarg);

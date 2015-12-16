@@ -8,6 +8,11 @@ int find_sum(int x, int y, int matrix[8][2], int* board);
 int *create_value_board(int *board);
 void map_over_cells(int *board, void (*function)(int*));
 void seed_cell(int *cell);
+void tick_cell(int *cell);
 void step(int *board);
+
+int num_digits(int n);
+int even_div(int n, int m);
+int digit_included(int n, int ns);
 
 #endif

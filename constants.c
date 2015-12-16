@@ -12,11 +12,17 @@ int WIN_Y = 50;
 int MAX_FPS = 10;
 
 /* default sim parameters */
-int OVER_POP = 4;
-int UNDER_POP = 1;
-int BIRTH_POP = 2;
+//int OVER_POP = 4;
+//int UNDER_POP = 1;
+//int BIRTH_POP = 2;
 
-int RAND_CHANCE = 2; // higher values have lower chances (rand()%chance == 1)
+int BORN_NS = 3;
+int LIVE_NS = 23;
+
+// char *SURVIVAL_RATE = "1234578"
+// char *BIRTH_RATE = "6"
+
+int RAND_CHANCE = 20; // higher values have lower chances (rand()%chance == 1)
 
 //typedef enum { Moore, Neumann } Neighborhood;
 Neighborhood HOOD = Moore;
