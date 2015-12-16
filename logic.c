@@ -110,6 +110,9 @@ int num_digits(int n) {
 }
 
 int digit_included(int n, int m) {
+    if(m < 10) {
+        return n == m;
+    }
     int m_len = num_digits(m);
     char digit_string[m_len+1];
     snprintf(digit_string, m_len+1, "%d", m);
