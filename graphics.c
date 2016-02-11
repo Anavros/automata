@@ -17,6 +17,13 @@ SDL_Window *start_sdl(void) {
     return window;
 }
 
+int get_cell_color(int value) {
+    div_t n = div(value, 10);
+    int alive = n.quot;
+    int neigh = n.rem;
+    return 64+(neigh*8)+(alive? 128:0);
+}
+
 SDL_Surface *render_board(int *board) {
     SDL_Surface *surface;
     surface = SDL_CreateRGBSurface(0, WIN_W, WIN_H, WIN_D, 0, 0, 0, 0);
@@ -27,13 +34,8 @@ SDL_Surface *render_board(int *board) {
         int y; for(y=0; y<BOARD_H; y++) {
             box.x = x*box.w;
             box.y = y*box.h;
-
-            int value = board[get_index(x, y)];
-            div_t n = div(value, 10);
-            int alive = n.quot;
-            int neigh = n.rem;
-            int cv = 128+(neigh*4)+(alive? 80:0);
-            int color = SDL_MapRGB(surface->format, cv, cv, cv);
+            int cc = get_cell_color(board[get_index(x, y)]);
+            int color = SDL_MapRGB(surface->format, cc, cc, cc);
             SDL_FillRect(surface, &box, color);
         }
     }

@@ -59,6 +59,7 @@ int main(int argc, char** argv) {
     int *board = create_board();
     seed(board);
     recount(board);
+    int frame = 0;
 
     do {
         int timer = SDL_GetTicks();
@@ -73,6 +74,7 @@ int main(int argc, char** argv) {
         // FPS maintenance
         int delta = SDL_GetTicks() - timer;
         delay_to_maintain_fps(delta);
+        if(++frame >= 100) break;
     } while(!any_key_pressed());
 
     free(board);

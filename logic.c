@@ -59,7 +59,7 @@ void step(int *cell_board) {
             int neigh = n.rem;
             if(alive) {
                 /* check if we should kill it */
-                if(digit_included(neigh, LIVE_NS)) {
+                if(!digit_included(neigh, LIVE_NS)) {
                     //printf("killing cell\n");
                     cell_board[index] = neigh;
                 }
