@@ -81,12 +81,22 @@ void recount(int *cell_board) {
             int value = 0;
             int i; for(i=-1; i<=1; i++) {
                 int j; for(j=-1; j<=1; j++) {
+                    int dx = x+i;
+                    int dy = y+j;
                     /* verify we're not outside the board */
-                    if(x+i < 0 || y+j < 0 || x+i >= BOARD_W || y+j >= BOARD_H) {
-                        continue;
-                    } else {
-                        if(cell_board[get_index(x+i, y+j)] >= 10) value++;
-                    } // if-else
+                    if(dx == -1) { // it's only the sides that crash!
+                        dx = BOARD_W-1;
+                    } else if(dx == BOARD_W) {
+                        dx = 0;
+                    }
+                    if(dy == -1) {
+                        dy = BOARD_H-1;
+                    } else if(dy == BOARD_H) {
+                        dy = 0;
+                    }
+                    if(cell_board[get_index(dx, dy)] >= 10) {
+                        value++;
+                    }
                 } // j
             } // i
             if(cell_board[get_index(x, y)] >= 10) // cell is alive

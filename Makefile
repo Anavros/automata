@@ -2,7 +2,8 @@ TARGET:= main
 TESTER:= DO_BUTT
 C_SRCS:= $(wildcard *.c)
 C_OBJS:= ${C_SRCS:.c=.o}
-CFLAGS:= -Wall -Wextra -pg -fdiagnostics-color=auto $(shell sdl2-config --cflags --libs) -lm
+#CFLAGS:= -Wall -Wextra -pg -fdiagnostics-color=auto -ftrapv $(shell sdl2-config --cflags --libs) -lm
+CFLAGS:= -fdiagnostics-color=auto -O3 $(shell sdl2-config --cflags --libs) -lm
 .PHONY: all clean run check test grind
 
 all: $(C_OBJS)

@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
         // FPS maintenance
         int delta = SDL_GetTicks() - timer;
         delay_to_maintain_fps(delta);
-        if(++frame >= 100) break;
+        //if(++frame >= 100) break;
     } while(!any_key_pressed());
 
     free(board);
