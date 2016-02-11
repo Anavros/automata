@@ -6,13 +6,11 @@ int get_index(int row, int column);
 int *create_board(void);
 int find_sum(int x, int y, int matrix[8][2], int* board);
 int *create_value_board(int *board);
-void map_over_cells(int *board, void (*function)(int*));
-void seed_cell(int *cell);
-void tick_cell(int *cell);
-void step(int *board);
+void seed(int *cell_board);
+void recount(int *cell_board);
+void step(int *cell_board);
 
 int num_digits(int n);
-int even_div(int n, int m);
 int digit_included(int n, int ns);
 
 #endif

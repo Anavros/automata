@@ -57,12 +57,14 @@ int main(int argc, char** argv) {
 
     SDL_Window *window = start_sdl();
     int *board = create_board();
-    map_over_cells(board, seed_cell);
+    seed(board);
+    recount(board);
 
     do {
         int timer = SDL_GetTicks();
 
         step(board);
+        recount(board);
         SDL_Surface *board_image = render_board(board);
         update_sdl(window, board_image);
 

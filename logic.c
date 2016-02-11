@@ -21,90 +21,6 @@ int *create_board(void) {
     return board;
 }
 
-int find_sum(int x, int y, int matrix[8][2], int* board) {
-    int sum = 0;
-    int len = 16; // TODO
-    //printf("len = %i", len);
-    int n; for(n=0; n<len/2; n++) {
-        //printf(" %i\n", n);
-        int dx = x + matrix[n][0];
-        int dy = y + matrix[n][1];
-        //printf(" dx: %i; dy: %i;\n ", dx, dy);
-        //printf(" mx: %i; my: %i;\n ", matrix[n][0], matrix[n][1]);
-
-        /* verify we're not outside the board */
-        if(dx < 0 || dy < 0 || dx >= BOARD_W || dy >= BOARD_H) {
-            //printf("Vetted cell; (%i, %i) is outside allowed range.\n", dx, dy);
-            continue;
-        } else {
-            //printf("Passed cell; (%i, %i) has value %i.\n", dx, dy, 
-                //board[get_index(dx, dy)]);
-            sum += board[get_index(dx, dy)];
-        }
-    }
-    //printf("sum = %i\n", sum);
-    return sum;
-}
-
-/* Return a *new* board where every cell is replaced with the value of its neighbors. */
-int *create_value_board(int *board) {
-    int *value_board = create_board();
-
-    /* TODO: add support for other neighborhood types */
-    int moore_matrix[8][2] = { 
-        {-1, -1}, {-1, 0}, {-1, 1},
-        { 0, -1},          { 0, 1},
-        { 1, -1}, { 1, 0}, { 1, 1} 
-    };
-
-    int row, column;
-    for(row=0; row<BOARD_H; row++) {
-        for(column=0; column<BOARD_W; column++) {
-            value_board[get_index(row, column)] = 
-                find_sum(row, column, moore_matrix, board);
-
-            //printf(" %i", value_board[get_index(row, column)]);
-        }
-        //printf("\n");
-    }
-    return value_board; // don't forget to free()!
-}
-
-/* Takes a generic function of the form "void *func(int *cell);" */
-void map_over_cells(int *board, void (*function)(int*)) {
-    int x; for(x=0; x<BOARD_W; x++) {
-        int y; for(y=0; y<BOARD_H; y++) {
-            int *cell = &board[get_index(x, y)];
-            function(cell);
-        }
-    }
-}
-
-// XXX could be expanded for multiple possible values
-void seed_cell(int *cell) {
-    int r = rand() % RAND_CHANCE;
-    int n = r==1 ? 1 : 0;
-    *cell = n; // XXX watch out for segfaults here!
-}
-
-/* Update a cell based on its neighbor value. */
-void update_cell(int *cell, int n) {
-    switch(*cell) {
-        case (0):
-            if(digit_included(n, BORN_NS)) {
-                *cell = 1;
-            }
-            break;
-        case (1):
-            if(!digit_included(n, LIVE_NS)) {
-                *cell = 0;
-            }
-            break;
-        default: 
-            break;
-    }
-}
-
 int num_digits(int n) {
     return (int) floor(log10((double) n))+1;
 }
@@ -124,15 +40,58 @@ int digit_included(int n, int m) {
     return 0;
 }
 
+void seed(int *cell_board) {
+    int x; for(x=0; x<BOARD_W; x++) {
+        int y; for(y=0; y<BOARD_W; y++) {
+            cell_board[get_index(x, y)] = (rand()%RAND_CHANCE)==1? 10:0;
+        }
+    }
+}
+
 void step(int *cell_board) {
-    int *value_board = create_value_board(cell_board);
     int x; for(x=0; x<BOARD_W; x++) {
         int y; for(y=0; y<BOARD_W; y++) {
             int index = get_index(x, y);
-            int *cell = &cell_board[index];
-            int neighbors_value = value_board[index];
-            update_cell(cell, neighbors_value);
-        }
-    }
-    free(value_board);
+            int value = cell_board[index];
+            // format for cell value is number of neighbors + 10 if alive
+            div_t n = div(value, 10);
+            int alive = n.quot;
+            int neigh = n.rem;
+            if(alive) {
+                /* check if we should kill it */
+                if(digit_included(neigh, LIVE_NS)) {
+                    //printf("killing cell\n");
+                    cell_board[index] = neigh;
+                }
+            } else {
+                /* check if we should spawn it */
+                if(digit_included(neigh, BORN_NS)) {
+                    //printf("birthing cell\n");
+                    cell_board[index] = neigh+10;
+                }
+            } // if/else
+        } // y
+    } // x
+} // step
+
+void recount(int *cell_board) {
+    int x; for(x=0; x<BOARD_W; x++) {
+        int y; for(y=0; y<BOARD_W; y++) {
+
+            int value = 0;
+            int i; for(i=-1; i<=1; i++) {
+                int j; for(j=-1; j<=1; j++) {
+                    /* verify we're not outside the board */
+                    if(x+i < 0 || y+j < 0 || x+i >= BOARD_W || y+j >= BOARD_H) {
+                        continue;
+                    } else {
+                        if(cell_board[get_index(x+i, y+j)] >= 10) value++;
+                    } // if-else
+                } // j
+            } // i
+            if(cell_board[get_index(x, y)] >= 10) // cell is alive
+                value += 9; // minus one for the false positive in the center
+            cell_board[get_index(x, y)] = value;
+        } // y
+    } // x
 }

@@ -22,6 +22,7 @@ int LIVE_NS;
 
 int RAND_CHANCE;
 Neighborhood HOOD;
+int MOORE_MATRIX[16];
 
 int BOARD_W;
 int BOARD_H;
