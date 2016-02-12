@@ -51,32 +51,51 @@ void delay_to_maintain_fps(int exec_time) {
     }
 }
 
+void run(SDL_Window *window, int *board) {
+    int status = 0;
+    int paused = 0;
+    int start_time;
+    int delta_time;
+    for(;;) {
+        //frame_count++;
+        start_time = SDL_GetTicks();
+
+        /* Update the simulation. */
+        if(!paused) {
+            step(board);
+            recount(board);
+        }
+
+        /* Render the board to the screen. */
+        SDL_Surface *board_image = render_board(board);
+        update_sdl(window, board_image);
+        free_surface(board_image);
+
+        /* Maintain a constant FPS. */
+        delta_time = SDL_GetTicks() - start_time;
+        delay_to_maintain_fps(delta_time);
+
+        /* Return with a key code after any key is pressed. */
+        status = get_input();
+        if(status == 1) paused = paused? 0:1;
+        else if(status == -1) break;
+    };
+}
+
 int main(int argc, char** argv) {
     set_parameters(argc, argv);
     srand(time(NULL));
-
     SDL_Window *window = start_sdl();
     int *board = create_board();
+
+    /* Set up the initial board with a random seed. */
     seed(board);
     recount(board);
-    int frame = 0;
 
-    do {
-        int timer = SDL_GetTicks();
+    /* Run the simulation and toggle pause when the spacebar is pressed. */
+    run(window, board);
 
-        step(board);
-        recount(board);
-        SDL_Surface *board_image = render_board(board);
-        update_sdl(window, board_image);
-
-        free_surface(board_image);
-
-        // FPS maintenance
-        int delta = SDL_GetTicks() - timer;
-        delay_to_maintain_fps(delta);
-        //if(++frame >= 100) break;
-    } while(!any_key_pressed());
-
+    /* Clean up. */
     free(board);
     end_sdl(window);
 
