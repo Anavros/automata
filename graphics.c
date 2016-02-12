@@ -27,8 +27,10 @@ int get_cell_color(int value, SDL_PixelFormat *format) {
     return SDL_MapRGB(format, color, color-10, color-20);
 }
 
-SDL_Surface *render_board(int *board) {
+SDL_Surface *render_board(int *board, SDL_Window *window) {
     SDL_Surface *surface;
+    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
+
     surface = SDL_CreateRGBSurface(
         0, CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE, WIN_D, 0, 0, 0, 0);
     SDL_Rect box;
@@ -41,19 +43,9 @@ SDL_Surface *render_board(int *board) {
             SDL_FillRect(surface, &box, color);
         }
     }
-    return surface;
-}
-
-/* blits and updates all in one */
-void update_sdl(SDL_Window *window, SDL_Surface *surface) {
-    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
     SDL_BlitSurface(surface, NULL, window_surface, NULL);
     SDL_UpdateWindowSurface(window);
     SDL_FreeSurface(window_surface);
-}
-
-void free_surface(SDL_Surface *surface) {
-    SDL_FreeSurface(surface);
 }
 
 void end_sdl(SDL_Window *window) {

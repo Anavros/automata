@@ -56,7 +56,7 @@ void delay_to_maintain_fps(int exec_time) {
     }
 }
 
-void run(SDL_Window *window, int *board) {
+int run(SDL_Window *window, int *board) {
     int status = 0;
     int paused = 0;
     int start_time;
@@ -72,9 +72,7 @@ void run(SDL_Window *window, int *board) {
         }
 
         /* Render the board to the screen. */
-        SDL_Surface *board_image = render_board(board);
-        update_sdl(window, board_image);
-        free_surface(board_image);
+        render_board(board, window);
 
         /* Maintain a constant FPS. */
         delta_time = SDL_GetTicks() - start_time;
@@ -84,8 +82,9 @@ void run(SDL_Window *window, int *board) {
         /* All other keys will end the program. */
         status = get_input();
         if(status == 1) paused = paused? 0:1;
-        else if(status == -1) break;
+        else if(status == -1 || status == 2) break;
     };
+    return status;
 }
 
 int main(int argc, char** argv) {
@@ -95,9 +94,12 @@ int main(int argc, char** argv) {
     int *board = create_board();
 
     /* Set up the initial board with a random seed and send it off. */
-    seed(board);
-    recount(board);
-    run(window, board);
+    restart:
+    for(;;) {
+        seed(board);
+        recount(board);
+        if(run(window, board) != 2) break;
+    }
 
     /* Clean up. */
     free(board);

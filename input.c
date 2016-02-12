@@ -9,16 +9,23 @@ int get_input() {
      * -1   Quit
      *  0   Continue
      *  1   Toggle Pause
+     *  2   Reset
      */
     int status = 0;
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         switch(event.type) {
             case SDL_QUIT:
-                status = -1;
-                break;
+                status = -1; break;
             case SDL_KEYDOWN:
-                status = (event.key.keysym.sym==SDLK_SPACE)? 1:-1;
+                switch(event.key.keysym.sym) {
+                    case SDLK_SPACE:
+                        status = 1; break;
+                    case SDLK_r:
+                        status = 2; break;
+                    default: 
+                        status = -1; break;
+                }
                 break;
             default:
                 break;

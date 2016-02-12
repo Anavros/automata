@@ -1,3 +1,3 @@
 
 TODO:
--> Allow more options to be specified on the terminal.
+-> Allow birth/death settings to be altered while running.
