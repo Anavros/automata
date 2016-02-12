@@ -1,4 +1,3 @@
 
 TODO:
--> outsource settings to a config file
--> allow board wrapping i.e. toroidal space
+-> Allow more options to be specified on the terminal.

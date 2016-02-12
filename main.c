@@ -16,27 +16,32 @@
 void set_parameters(int argc, char**argv) {
 
     int c, index;
-    struct option long_options[5] = {
-        {"survive", required_argument, 0, 's'},
-        {"birth", required_argument, 0, 'b'},
-        {"frames-per-second", required_argument, 0, 'f'},
-        {"seed-density", required_argument, 0, 'r'}
+    struct option long_options[6] = {
+        {"survive",             required_argument, 0, 's'},
+        {"birth",               required_argument, 0, 'b'},
+        {"frames-per-second",   required_argument, 0, 'f'},
+        {"seed-density",        required_argument, 0, 'r'},
+        {"cell-size",           required_argument, 0, 'c'}
     };
 
     do {
-        c = getopt_long(argc, argv, "s:b:f:r:", long_options, &index);
+        c = getopt_long(argc, argv, "s:b:f:r:c:", long_options, &index);
         switch(c) {
         case 's':
-            LIVE_NS = atoi(optarg);
+            SURVIVAL_VALUES = atoi(optarg);
             break;
         case 'b':
-            BORN_NS = atoi(optarg);
+            BIRTH_VALUES = atoi(optarg);
             break;
         case 'f':
             MAX_FPS = atoi(optarg);
             break;
         case 'r':
             RAND_CHANCE = atoi(optarg);
+            break;
+        case 'c':
+            CELL_SIZE = atoi(optarg);
+            BOARD_SIZE = 800/CELL_SIZE;
             break;
         }
     } while(c != -1);
@@ -60,7 +65,7 @@ void run(SDL_Window *window, int *board) {
         //frame_count++;
         start_time = SDL_GetTicks();
 
-        /* Update the simulation. */
+        /* Update the simulation given it's not paused. */
         if(!paused) {
             step(board);
             recount(board);
@@ -75,7 +80,8 @@ void run(SDL_Window *window, int *board) {
         delta_time = SDL_GetTicks() - start_time;
         delay_to_maintain_fps(delta_time);
 
-        /* Return with a key code after any key is pressed. */
+        /* Toggle pause if the spacebar has been pressed. */
+        /* All other keys will end the program. */
         status = get_input();
         if(status == 1) paused = paused? 0:1;
         else if(status == -1) break;
@@ -88,11 +94,9 @@ int main(int argc, char** argv) {
     SDL_Window *window = start_sdl();
     int *board = create_board();
 
-    /* Set up the initial board with a random seed. */
+    /* Set up the initial board with a random seed and send it off. */
     seed(board);
     recount(board);
-
-    /* Run the simulation and toggle pause when the spacebar is pressed. */
     run(window, board);
 
     /* Clean up. */

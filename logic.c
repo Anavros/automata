@@ -4,20 +4,20 @@
 #include <unistd.h>     /* rand() */
 #include <math.h>       /* log10() pow() */
 
-#include "constants.h"  /* [OVER|UNDER|BIRTH]_POP BOARD_[W|H] RAND_CHANCE */
+#include "constants.h"  /* BOARD_SIZE [BIRTH|SURVIVAL]_VALUES RAND_CHANCE */
 #include "logic.h"
 
 
 /* Shortcut to calculate the index for a "2D" matrix that is actually 1D. */
 int get_index(int row, int column) {
-    return (row*BOARD_W) + column;
+    return (row*BOARD_SIZE) + column;
 }
 
 /* Allocates and memsets a new chunk of memory.
  * Takes board dimensions from constants.h.
  */
 int *create_board(void) {
-    int *board = calloc(sizeof(int), BOARD_W*BOARD_H);
+    int *board = calloc(sizeof(int), BOARD_SIZE*BOARD_SIZE);
     return board;
 }
 
@@ -41,16 +41,16 @@ int digit_included(int n, int m) {
 }
 
 void seed(int *cell_board) {
-    int x; for(x=0; x<BOARD_W; x++) {
-        int y; for(y=0; y<BOARD_W; y++) {
+    int x; for(x=0; x<BOARD_SIZE; x++) {
+        int y; for(y=0; y<BOARD_SIZE; y++) {
             cell_board[get_index(x, y)] = (rand()%RAND_CHANCE)==1? 10:0;
         }
     }
 }
 
 void step(int *cell_board) {
-    int x; for(x=0; x<BOARD_W; x++) {
-        int y; for(y=0; y<BOARD_W; y++) {
+    int x; for(x=0; x<BOARD_SIZE; x++) {
+        int y; for(y=0; y<BOARD_SIZE; y++) {
             int index = get_index(x, y);
             int value = cell_board[index];
             // format for cell value is number of neighbors + 10 if alive
@@ -59,14 +59,12 @@ void step(int *cell_board) {
             int neigh = n.rem;
             if(alive) {
                 /* check if we should kill it */
-                if(!digit_included(neigh, LIVE_NS)) {
-                    //printf("killing cell\n");
+                if(!digit_included(neigh, SURVIVAL_VALUES)) {
                     cell_board[index] = neigh;
                 }
             } else {
                 /* check if we should spawn it */
-                if(digit_included(neigh, BORN_NS)) {
-                    //printf("birthing cell\n");
+                if(digit_included(neigh, BIRTH_VALUES)) {
                     cell_board[index] = neigh+10;
                 }
             } // if/else
@@ -75,8 +73,8 @@ void step(int *cell_board) {
 } // step
 
 void recount(int *cell_board) {
-    int x; for(x=0; x<BOARD_W; x++) {
-        int y; for(y=0; y<BOARD_W; y++) {
+    int x; for(x=0; x<BOARD_SIZE; x++) {
+        int y; for(y=0; y<BOARD_SIZE; y++) {
 
             int value = 0;
             int i; for(i=-1; i<=1; i++) {
@@ -85,13 +83,13 @@ void recount(int *cell_board) {
                     int dy = y+j;
                     /* verify we're not outside the board */
                     if(dx == -1) { // it's only the sides that crash!
-                        dx = BOARD_W-1;
-                    } else if(dx == BOARD_W) {
+                        dx = BOARD_SIZE-1;
+                    } else if(dx == BOARD_SIZE) {
                         dx = 0;
                     }
                     if(dy == -1) {
-                        dy = BOARD_H-1;
-                    } else if(dy == BOARD_H) {
+                        dy = BOARD_SIZE-1;
+                    } else if(dy == BOARD_SIZE) {
                         dy = 0;
                     }
                     if(cell_board[get_index(dx, dy)] >= 10) {

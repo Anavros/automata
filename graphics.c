@@ -12,7 +12,9 @@
 SDL_Window *start_sdl(void) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow(
-        TITLE, WIN_X, WIN_Y, WIN_W, WIN_H, SDL_WINDOW_OPENGL);
+        TITLE, WIN_X, WIN_Y,
+        CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE,
+        SDL_WINDOW_OPENGL);
 
     return window;
 }
@@ -27,20 +29,18 @@ int get_cell_color(int value, SDL_PixelFormat *format) {
 
 SDL_Surface *render_board(int *board) {
     SDL_Surface *surface;
-    surface = SDL_CreateRGBSurface(0, WIN_W, WIN_H, WIN_D, 0, 0, 0, 0);
+    surface = SDL_CreateRGBSurface(
+        0, CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE, WIN_D, 0, 0, 0, 0);
     SDL_Rect box;
-    box.w = WIN_W / BOARD_W;
-    box.h = WIN_H / BOARD_H;
-    int x; for(x=0; x<BOARD_W; x++) {
-        int y; for(y=0; y<BOARD_H; y++) {
-            box.x = x*box.w;
-            box.y = y*box.h;
+    box.w = box.h = CELL_SIZE;
+    int x; for(x=0; x<BOARD_SIZE; x++) {
+        int y; for(y=0; y<BOARD_SIZE; y++) {
+            box.x = x*CELL_SIZE;
+            box.y = y*CELL_SIZE;
             int color = get_cell_color(board[get_index(x, y)], surface->format);
             SDL_FillRect(surface, &box, color);
         }
     }
-    //free(value_board);
-    //SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 200, 75, 75)); //Temp
     return surface;
 }
 
