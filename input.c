@@ -23,8 +23,12 @@ int get_input() {
                         status = 1; break;
                     case SDLK_r:
                         status = 2; break;
-                    default: 
+                    case SDLK_q:
+                    case SDLK_ESCAPE:
+                    case SDLK_CAPSLOCK: // for people with swapped esc and caps
                         status = -1; break;
+                    default:
+                        status = 0; break;
                 }
                 break;
             default:

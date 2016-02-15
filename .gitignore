@@ -3,3 +3,5 @@
 *.sup
 *.o
 main
+grind.sup
+gmon.out

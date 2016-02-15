@@ -69,10 +69,8 @@ int run(SDL_Window *window, int *board) {
         if(!paused) {
             step(board);
             recount(board);
+            render_board(board, window);
         }
-
-        /* Render the board to the screen. */
-        render_board(board, window);
 
         /* Maintain a constant FPS. */
         delta_time = SDL_GetTicks() - start_time;
@@ -94,7 +92,6 @@ int main(int argc, char** argv) {
     int *board = create_board();
 
     /* Set up the initial board with a random seed and send it off. */
-    restart:
     for(;;) {
         seed(board);
         recount(board);

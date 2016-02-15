@@ -2,7 +2,7 @@
 # Automata
 configurable 'life-like' cellular automata in c/sdl
 
-TODO: add pictures
+(picture)
 
 ## Usage
 ```
@@ -30,7 +30,7 @@ higher values correlate to less dense boards
 ```
 
 #### Interesting Presets
- Settings            | Description 
+ Settings            | Description
 ---------------------|----------------------
 `-b3 -s23`           | original game of life
 `-b3 -s123456780`    | life without death
