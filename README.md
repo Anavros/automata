@@ -2,8 +2,29 @@
 # Automata
 configurable 'life-like' cellular automata in c/sdl
 
+### Description
+A [cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton) (plural: automata)
+is a discrete mathematical simulation that follows simple rules. It takes place
+on a two-dimensional board split into cells, where each cell is considered alive
+(on), or dead (off). The game progresses in steps: for each step, each cell
+counts the number of live neighbors it has and compares it to the established
+birth (-b) and survival (-s) rules. If the cell is dead, and its number of live
+neighbors is contained in the birth parameters, then the cell will be 'born',
+and turn on. Likewise, if a cell is already alive, and its neighbor count is
+within the survival parameters, it will stay alive; otherwise, it will die, and
+turn off. The birth and survival parameters are set by you, the user, at the
+beginning of each simulation.
+
+This particular board is
+[toroidal](https://en.wikipedia.org/wiki/Wraparound_(video_games)), so any cells
+that move past the boundary will reappear immediately on the other side,
+unaffected.
+
+Graphically, live cells appear white, and dead cells dark grey. There is a small
+glowing effect for each cell that intensifies with each live neighbor it has.
+
 ### Screenshots
-######Conway's Game of Life `(-b23 -s3)`
+######Conway's Game of Life `(-b3 -s23)`
 ![Standard Game of Life](/docs/screenshots/life.jpg?raw=true "Standard Game of Life")
 
 ######Life without Death `(-b3 -s123456780)`
@@ -15,11 +36,8 @@ $ git clone https://github.com/anavros/automata.git .
 $ make
 $ ./main [optional arguments]
 ```
-While the simulation is running, `Space` pauses, `R` resets the seed, and `Q`,
-`Esc` or `Capslock` exits the program. The board is toroidal, so any cells that
-move past the boundary will show up on the other side unaffected. Cells that are
-alive glow white, and each cell, dead or alive, glows a small amount extra when
-they have more live neighbors. This produces a luminescent effect.
+Once the simulation is running, `Space` pauses, `R` resets the seed, and `Q`,
+`Esc`, or `Capslock` exits the program.
 
 ### Console Arguments
 ```
@@ -62,9 +80,11 @@ Ex: ./main -c 4
 ---------------------|----------------------
 `-b3 -s23`           | original game of life
 `-b3 -s123456780`    | life without death
+`-b378 -s12456780`   | custom personal favorite
 --------------------------------------------
 
-See [wikipedia](https://en.wikipedia.org/wiki/Life-like_cellular_automaton) for more examples of life-like automata.
+See [wikipedia](https://en.wikipedia.org/wiki/Life-like_cellular_automaton) for
+more examples of life-like automata.
 
 
 
