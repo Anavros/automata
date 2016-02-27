@@ -36,6 +36,8 @@ $ git clone https://github.com/anavros/automata.git .
 $ make
 $ ./main [optional arguments]
 ```
+You'll need SDL along with the basic C compilation tools, and make obviously.
+
 Once the simulation is running, `Space` pauses, `R` resets the seed, and `Q`,
 `Esc`, or `Capslock` exits the program.
 
