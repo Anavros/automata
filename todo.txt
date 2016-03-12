@@ -1,3 +1,15 @@
 
-TODO:
--> Allow birth/death settings to be altered while running.
+Stable Release:
+* Features basic automata simulation using moore neighborhoods, pausing,
+restarting, toroidal boards, and customizable rules.
+
+Feature Expansion:
+* Each update adds features to make the program more flexible.
+* There will also be updates to improve the user interface, the program's
+performance, and the clarity of the code.
+
+Ideas:
+* Directional automata: each cell has both a value and a direction.
+* Runtime-modifiable rules.
+* Different kinds of seeding patterns.
+* Outsourceable rulesets, e.g. using config files.
