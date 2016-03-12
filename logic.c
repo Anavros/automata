@@ -1,10 +1,12 @@
+/* logic.c */
 
-#include <stdlib.h>     /* calloc() div() */
+#include <stdlib.h>     // calloc(), div()
 #include <stdio.h>
-#include <unistd.h>     /* rand() */
-#include <math.h>       /* log10() pow() */
+#include <unistd.h>     // rand()
+#include <math.h>       // log10(), pow()
 
-#include "constants.h"  /* BOARD_SIZE [BIRTH|SURVIVAL]_VALUES RAND_CHANCE */
+#include "constants.h"  // Program Parameters
+
 #include "logic.h"
 
 

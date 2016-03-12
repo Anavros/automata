@@ -13,3 +13,28 @@ Ideas:
 * Runtime-modifiable rules.
 * Different kinds of seeding patterns.
 * Outsourceable rulesets, e.g. using config files.
+
+Version Plans:
+
+    v1.1 - Gearing up for new development.
+================================================================================
+* Basic user interface and code clarity changes to prepare for new features.
+    -> Separate modules into more granular pieces.
+    -> Cleaner point of entry with less global constants.
+* Removal of heavy reliance on constants file for parameters.
+* Possible changes in function design to be more flexible.
+
+* Rules to be changed at runtime, while paused?
+
+    v1.2 - Performance-enhancing libraries?
+================================================================================
+* Switch to OpenGL for the rendering backend.
+* Offload some of the simulation to the graphics card.
+
+    v1.3 - First major new features?
+================================================================================
+* Add direction parameters to each cell to be used arbitrarily.
+
+    v1.4 - Ease of use and configuration?
+================================================================================
+* Offload configuration to a config file, likely using either lua or yml.

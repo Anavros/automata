@@ -1,3 +1,4 @@
+/* main.c */
 
 #include <stdio.h>      /* printf() */
 //#include <stdlib.h>
@@ -81,7 +82,7 @@ int run(SDL_Window *window, int *board) {
         status = get_input();
         if(status == 1) paused = paused? 0:1;
         else if(status == -1 || status == 2) break;
-    };
+    }
     return status;
 }
 
