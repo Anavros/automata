@@ -1,11 +1,12 @@
 
 
-#include<stdlib.h>
-#include"SDL.h"
+#include <stdlib.h>
+#include "SDL.h"
 
-#include"constants.h"  /* TITLE WIN_[X|Y|W|H] */
-#include"graphics.h"
-#include"logic.h"      /* get_index() */
+#include "constants.h"
+#include "graphics.h"
+#include "logic.h"      /* get_index() */
+#include "board.h"      // board
 
 /* may return NULL if initialization fails */
 /* uses constants found in constants.h */
@@ -27,7 +28,28 @@ int get_cell_color(int value, SDL_PixelFormat *format) {
     return SDL_MapRGB(format, color, color-10, color-20);
 }
 
-SDL_Surface *render_board(int *board, SDL_Window *window) {
+void render_new_board(Board* b, SDL_Window* window) {
+    SDL_Surface *surface;
+    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
+
+    surface = SDL_CreateRGBSurface(
+        0, CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE, WIN_D, 0, 0, 0, 0);
+    SDL_Rect box;
+    box.w = box.h = CELL_SIZE;
+    int x; for(x=0; x<BOARD_SIZE; x++) {
+        int y; for(y=0; y<BOARD_SIZE; y++) {
+            box.x = x*CELL_SIZE;
+            box.y = y*CELL_SIZE;
+            int color = get_cell_color(b->data[board.in(x, y, b->width)], surface->format);
+            SDL_FillRect(surface, &box, color);
+        }
+    }
+    SDL_BlitSurface(surface, NULL, window_surface, NULL);
+    SDL_UpdateWindowSurface(window);
+    SDL_FreeSurface(window_surface);
+}
+
+void render_board(int *board, SDL_Window *window) {
     SDL_Surface *surface;
     SDL_Surface *window_surface = SDL_GetWindowSurface(window);
 

@@ -6,4 +6,4 @@
 main
 automata
 grind.sup
-gmon.out
+*.out
