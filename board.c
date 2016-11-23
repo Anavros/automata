@@ -1,5 +1,6 @@
 /* board.c */
 
+#include <stdio.h>
 #include <stdlib.h>     // malloc
 #include <unistd.h>     // rand
 #include "constants.h"  // Board, Cell
@@ -22,11 +23,17 @@ static void destroy_board(Board *b) {
     free(b);
 }
 
+// BUG: this is it, isn't it
 static int in(int row, int col, int width) {
-    return row*width + col;
+    if(row*col > globalconfig.BOARD_W*globalconfig.BOARD_H) {
+        puts("I saw this coming!");
+        return 0;
+    } else {
+        return row*width + col;
+    }
 }
 
-static Cell * get_cell(int row, int col, Board *b) {
+static Cell* get_cell(int row, int col, Board *b) {
     int packed_value = b->data[in(row, col, b->width)];
     Cell *c = malloc(sizeof(Cell));
     c->alive = packed_value%10;
@@ -35,7 +42,7 @@ static Cell * get_cell(int row, int col, Board *b) {
 }
 
 static void put_cell(Cell *c, int row, int col, Board *b) {
-    int *ptr = &b->data[ in(row, col, b->width) ];
+    int *ptr = &(b->data[ in(row, col, b->width) ]);
     int packed_value = (c->alive*10) + (c->direction*100);
     *ptr = packed_value;
 }
@@ -46,8 +53,8 @@ static void put_cell(Cell *c, int row, int col, Board *b) {
 /* Randomly set cells to be alive for a starting state. */
 static void seed_board(int density, Board *b) {
     int x, y;
-    for(x=0; x<b->width; x++) {
-        for(y=0; y<b->height; y++) {
+    for(x=0; x < b->height; x++) {
+        for(y=0; y < b->width; y++) {
             Cell *c = get_cell(x, y, b);
             c->alive = (rand()%density == 1)? 1:0;
             put_cell(c, x, y, b);
@@ -57,8 +64,8 @@ static void seed_board(int density, Board *b) {
 }
 
 static void step_board(Board* b) {
-    int x; for(x=0; x<b->width; x++) {
-        int y; for(y=0; y<b->height; y++) {
+    int x; for(x=0; x < b->height; x++) {
+        int y; for(y=0; y < b->width; y++) {
             int i = in(x, y, b->width);
             int value = b->data[i];
 
@@ -68,12 +75,12 @@ static void step_board(Board* b) {
             int neigh = n.rem;
             if(alive) {
                 /* check if we should kill it */
-                if(!digit_included(neigh, SURVIVAL_VALUES)) {
+                if(!digit_included(neigh, globalconfig.SURVIVAL)) {
                     b->data[i] = neigh;
                 }
             } else {
                 /* check if we should spawn it */
-                if(digit_included(neigh, BIRTH_VALUES)) {
+                if(digit_included(neigh, globalconfig.BIRTH)) {
                     b->data[i] = neigh+10;
                 }
             }
@@ -82,8 +89,8 @@ static void step_board(Board* b) {
 }
 
 static void recount_board(Board* b) {
-    int x; for(x=0; x<b->width; x++) {
-        int y; for(y=0; y<b->height; y++) {
+    int x; for(x=0; x < b->height; x++) {
+        int y; for(y=0; y < b->width; y++) {
 
             int value = 0;
             int i; for(i=-1; i<=1; i++) {
@@ -92,13 +99,13 @@ static void recount_board(Board* b) {
                     int dy = y+j;
                     /* verify we're not outside the board */
                     if(dx == -1) { // it's only the sides that crash!
-                        dx = b->width-1;
-                    } else if(dx == b->width) {
+                        dx = b->height-1;
+                    } else if(dx == b->height) {
                         dx = 0;
                     }
                     if(dy == -1) {
-                        dy = b->height-1;
-                    } else if(dy == b->height) {
+                        dy = b->width-1;
+                    } else if(dy == b->width) {
                         dy = 0;
                     }
                     if(b->data[in(dx, dy, b->width)] >= 10) {

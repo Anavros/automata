@@ -9,12 +9,17 @@ int WIN_D;
 int WIN_X;
 int WIN_Y;
 
-int CELL_SIZE;
-int BOARD_SIZE;
-int MAX_FPS;
-int RAND_CHANCE;
-int BIRTH_VALUES;
-int SURVIVAL_VALUES;
+extern struct ConfigNamespace {
+    int TILE_SIZE;
+    int BOARD_W;
+    int BOARD_H;
+    int PIXEL_W;
+    int PIXEL_H;
+    int FPS;
+    int SEED_DENSITY;
+    int BIRTH;
+    int SURVIVAL;
+} globalconfig;
 
 struct _Cell {
     int alive;          // 0-1

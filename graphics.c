@@ -10,13 +10,14 @@
 
 /* may return NULL if initialization fails */
 /* uses constants found in constants.h */
-SDL_Window *start_sdl(void) {
+SDL_Window *start_sdl(int width, int height) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow(
         TITLE, WIN_X, WIN_Y,
-        CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE,
-        SDL_WINDOW_OPENGL);
-
+        width,
+        height,
+        SDL_WINDOW_OPENGL
+    );
     return window;
 }
 
@@ -28,45 +29,30 @@ int get_cell_color(int value, SDL_PixelFormat *format) {
     return SDL_MapRGB(format, color, color-10, color-20);
 }
 
-void render_new_board(Board* b, SDL_Window* window) {
+void render_board(Board* b, SDL_Window* window) {
     SDL_Surface *surface;
     SDL_Surface *window_surface = SDL_GetWindowSurface(window);
 
     surface = SDL_CreateRGBSurface(
-        0, CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE, WIN_D, 0, 0, 0, 0);
+        0,
+        globalconfig.PIXEL_W,
+        globalconfig.PIXEL_H,
+        WIN_D, 0, 0, 0, 0
+    );
     SDL_Rect box;
-    box.w = box.h = CELL_SIZE;
-    int x; for(x=0; x<BOARD_SIZE; x++) {
-        int y; for(y=0; y<BOARD_SIZE; y++) {
-            box.x = x*CELL_SIZE;
-            box.y = y*CELL_SIZE;
-            int color = get_cell_color(b->data[board.in(x, y, b->width)], surface->format);
+    box.w = box.h = globalconfig.TILE_SIZE;
+    int x; for(x=0; x < b->height; x++) {
+        int y; for(y=0; y < b->width; y++) {
+            box.x = x*globalconfig.TILE_SIZE;
+            box.y = y*globalconfig.TILE_SIZE;
+            int color = get_cell_color(
+                b->data[board.in(x, y, b->width)], surface->format);
             SDL_FillRect(surface, &box, color);
         }
     }
     SDL_BlitSurface(surface, NULL, window_surface, NULL);
     SDL_UpdateWindowSurface(window);
-    SDL_FreeSurface(window_surface);
-}
-
-void render_board(int *board, SDL_Window *window) {
-    SDL_Surface *surface;
-    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
-
-    surface = SDL_CreateRGBSurface(
-        0, CELL_SIZE*BOARD_SIZE, CELL_SIZE*BOARD_SIZE, WIN_D, 0, 0, 0, 0);
-    SDL_Rect box;
-    box.w = box.h = CELL_SIZE;
-    int x; for(x=0; x<BOARD_SIZE; x++) {
-        int y; for(y=0; y<BOARD_SIZE; y++) {
-            box.x = x*CELL_SIZE;
-            box.y = y*CELL_SIZE;
-            int color = get_cell_color(board[get_index(x, y)], surface->format);
-            SDL_FillRect(surface, &box, color);
-        }
-    }
-    SDL_BlitSurface(surface, NULL, window_surface, NULL);
-    SDL_UpdateWindowSurface(window);
+    SDL_FreeSurface(surface);
     SDL_FreeSurface(window_surface);
 }
 

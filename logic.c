@@ -10,19 +10,6 @@
 #include "logic.h"
 
 
-/* Shortcut to calculate the index for a "2D" matrix that is actually 1D. */
-int get_index(int row, int column) {
-    return (row*BOARD_SIZE) + column;
-}
-
-/* Allocates and memsets a new chunk of memory.
- * Takes board dimensions from constants.h.
- */
-int *create_board(void) {
-    int *board = calloc(sizeof(int), BOARD_SIZE*BOARD_SIZE);
-    return board;
-}
-
 int num_digits(int n) {
     return (int) floor(log10((double) n))+1;
 }
@@ -40,68 +27,4 @@ int digit_included(int n, int m) {
         }
     }
     return 0;
-}
-
-void seed(int *cell_board) {
-    int x; for(x=0; x<BOARD_SIZE; x++) {
-        int y; for(y=0; y<BOARD_SIZE; y++) {
-            cell_board[get_index(x, y)] = (rand()%RAND_CHANCE)==1? 10:0;
-        }
-    }
-}
-
-void step(int *cell_board) {
-    int x; for(x=0; x<BOARD_SIZE; x++) {
-        int y; for(y=0; y<BOARD_SIZE; y++) {
-            int index = get_index(x, y);
-            int value = cell_board[index];
-            // format for cell value is number of neighbors + 10 if alive
-            div_t n = div(value, 10);
-            int alive = n.quot;
-            int neigh = n.rem;
-            if(alive) {
-                /* check if we should kill it */
-                if(!digit_included(neigh, SURVIVAL_VALUES)) {
-                    cell_board[index] = neigh;
-                }
-            } else {
-                /* check if we should spawn it */
-                if(digit_included(neigh, BIRTH_VALUES)) {
-                    cell_board[index] = neigh+10;
-                }
-            } // if/else
-        } // y
-    } // x
-} // step
-
-void recount(int *cell_board) {
-    int x; for(x=0; x<BOARD_SIZE; x++) {
-        int y; for(y=0; y<BOARD_SIZE; y++) {
-
-            int value = 0;
-            int i; for(i=-1; i<=1; i++) {
-                int j; for(j=-1; j<=1; j++) {
-                    int dx = x+i;
-                    int dy = y+j;
-                    /* verify we're not outside the board */
-                    if(dx == -1) { // it's only the sides that crash!
-                        dx = BOARD_SIZE-1;
-                    } else if(dx == BOARD_SIZE) {
-                        dx = 0;
-                    }
-                    if(dy == -1) {
-                        dy = BOARD_SIZE-1;
-                    } else if(dy == BOARD_SIZE) {
-                        dy = 0;
-                    }
-                    if(cell_board[get_index(dx, dy)] >= 10) {
-                        value++;
-                    }
-                } // j
-            } // i
-            if(cell_board[get_index(x, y)] >= 10) // cell is alive
-                value += 9; // minus one for the false positive in the center
-            cell_board[get_index(x, y)] = value;
-        } // y
-    } // x
 }
